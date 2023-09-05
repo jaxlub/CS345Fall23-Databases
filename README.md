@@ -2,5 +2,6 @@
 ## Classnotes
 - Contains notes and code snippets from class
 
-## Homework Assignments
+## Homework 
 - hw1.pdf - 9/1/23 - Chapter 1 Q's on Database levels and vocab
+- hw2.pdf - 9/5/23 - Documentation on building textbook university database
