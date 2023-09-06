@@ -66,3 +66,23 @@ WHERE
 			WHERE 
 				zip = '13617');
 
+
+-- Columns are not always directly from tables, they are sometimes computed.
+SELECT 1;
+SELECT pi()/180 as Answer;
+
+-- convert lat/lon coordinates to radians
+SELECT
+    zip, state, city, lon*pi()/180 as lon, lat*pi()/180 as lat
+FROM
+    zips
+LIMIT 10;
+
+-- Find the geographic center of lon/lat in lower 48
+SELECT
+    avg(lon), avg(lat)
+FROM
+    zips
+WHERE
+    state NOT IN ('AK','HI','PR','DC', 'VI');
+    -- state != 'AK' and state != 'HI' and state != 'PR' and state != 'VI';
