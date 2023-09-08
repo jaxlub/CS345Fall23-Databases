@@ -42,12 +42,15 @@ INSERT INTO enrollment values ('1','1', 'FALL', 1991),
                               ('2','2', 'SPRING', 1991);
 
 -- get list of all class Harry Potter has taken
+-- output columns: Course ID, Course Title
 SELECT
     *
 FROM
     students, enrollment, courses
 WHERE
-    students.first_name = 'Harold' & students.last_name = 'Potter'
+    students.id = '1' and
+    students.id = enrollment.id and --join
+    enrollment.cnum = courses.cnum;
 
 -- finish next time
 ;

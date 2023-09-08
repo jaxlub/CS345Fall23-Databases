@@ -86,3 +86,15 @@ FROM
 WHERE
     state NOT IN ('AK','HI','PR','DC', 'VI');
     -- state != 'AK' and state != 'HI' and state != 'PR' and state != 'VI';
+
+
+-- create all possible pairs of zipcodes
+SELECT
+    *
+FROM
+    zips as z1, zips as z2
+WHERE
+    z1.zip = z2.zip and
+    z1.state != z2.state
+ORDER BY
+    z1.state;
