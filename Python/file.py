@@ -13,7 +13,9 @@ def join(r1: set, r2: set):
 if __name__ == "__main__":
     # python implements sets as efficiently as hash tab;e
     students = {('Harry', 1), ('Ron', 3), ('Hermione', 2), ('Draco', 666)}
-    enrollments = {('1,', 'P101'), ('2', 'DA101'), ('1', 'DA101'), ('3', 'P101')}
+    enrollments = {(1, 'P101'), (2, 'DA101'), (1, 'DA101'), (3, 'P101')}
     
-    print(join({1, 2, 3}, {'a', 'b', 'c'}))  # expect 12
+    #print(join({1, 2, 3}, {'a', 'b', 'c'}))  # expect 12
     print(join(students, enrollments))
+
+

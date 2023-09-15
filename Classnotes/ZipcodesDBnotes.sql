@@ -98,3 +98,33 @@ WHERE
     z1.state != z2.state
 ORDER BY
     z1.state;
+
+
+-- Which States have less then 100 zipcodes
+-- Zipcodes DB
+SELECT
+    state, count(*)
+FROM zips
+group by
+    state
+HAVING
+    count(*) < 100;
+
+
+-- Which city has the most number of zipcodes
+WITH
+    counts as
+        (SELECT
+             count(*) as count
+         From zips
+         GROUP BY city, state)
+SELECT
+    city, state, count(*)
+FROM zips
+GROUP BY
+    city, state
+HAVING
+    count(*) = (SELECT
+        max(count)
+    FROM
+        counts);
