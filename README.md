@@ -8,3 +8,4 @@
 - hw3 directory - 9/18/23 - 
     * part1.sql - Textbook Exercises on University Database
     * part2.sql - Textbook Exercise on DDL creation
+- hw4.sql - 9/20/23 - University Database GPA Queries 

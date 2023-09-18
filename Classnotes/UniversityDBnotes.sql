@@ -143,4 +143,114 @@ SELECT
  FROM teaches
  WHERE
      teaches.course_id = '200' and
-     teaches.id != '14365'
+     teaches.id != '14365';
+
+-- JOIN Syntax
+-- get a list of courses that dale teaches
+
+SELECT
+    teaches.id, course_id, semester, year
+FROM
+    teaches, instructor
+WHERE
+    instructor.name = 'Dale' and
+    teaches.id = instructor.id; -- This is the join condition
+-- Now using a join
+SELECT
+    id, course_id, semester, year
+FROM
+    teaches natural join instructor -- joins on ALL COMMON attribute names
+WHERE
+    instructor.name = 'Dale';
+
+-- Get all of the student ID's who were taught by Dale
+SELECT
+    takes.id
+FROM
+    takes join (instructor natural join teaches) using (course_id, sec_id, semester, year)
+WHERE
+    instructor.name = 'Dale';
+
+-- Insert two new instructors into instructor relation
+INSERT INTO instructor VALUES ('99999', 'Angstadt', 'Comp. Sci.', 100000),
+                              ('99998', 'Torrey', 'Comp. Sci.', 100000);
+
+-- Create a table of advisor IDs and a count of how many students they advise
+SELECT
+    advisor.i_id, count(*) as Advisee_Count
+FROM advisor
+group by advisor.i_id;
+
+-- How can we find people with no advisees
+(SELECT
+     instructor.id
+ FROM
+     instructor
+ ) EXCEPT (SELECT
+               advisor.i_id
+           FROM advisor);
+-- or....
+SELECT
+    id
+FROM
+    instructor
+WHERE
+    id not in (SELECT i_id
+               FROM
+                   advisor);
+-- Now union these two together to include those with and without advisees
+WITH
+    advisor_counts as ((SELECT
+                           advisor.i_id, count(*) as Advisee_Count
+                       FROM advisor
+                       group by advisor.i_id) UNION ((SELECT
+                                                          instructor.id, 0
+                                                      FROM
+                                                          instructor) EXCEPT
+                                                                      (SELECT
+                                                                           advisor.i_id, 0
+                                                                       FROM
+                                                                           advisor))
+                                                                       ORDER BY
+                                                                           Advisee_Count)
+SELECT
+    instructor.name, instructor.id, advisor_counts.Advisee_Count
+FROM instructor join advisor_counts on instructor.id = advisor_counts.i_id; -- join on IDs to pull the names
+
+-- Re-writing but with CORRELATION query
+SELECT
+    instructor.name, instructor.id, (SELECT
+                                         count(s_id)
+                                     FROM
+                                         advisor
+                                     WHERE advisor.i_id = instructor.id)
+FROM
+    instructor;
+-- Similar to nested-for loops to join, for every row in instructor (loop1) we iterate through
+-- advisor (loop2) and count up total
+
+-- OUTER JOINS
+
+-- done in jalubk20 DB
+/*
+CREATE TABLE R1 (
+    a int,
+    b int,
+    c int);
+CREATE TABLE R2 (
+    a int,
+    b int,
+    d int);
+insert into R1 values (1,2,3),
+                      (1,3,2),
+                      (4,1,3);
+
+insert into R2 values (1,3,3),
+                      (1,3,4),
+                      (2,2,3);
+SELECT
+    *
+FROM R1 natural join R2;
+*/
+
+
