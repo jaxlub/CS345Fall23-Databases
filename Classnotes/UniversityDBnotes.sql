@@ -253,4 +253,87 @@ SELECT
 FROM R1 natural join R2;
 */
 
+-- Build name, id and count of advisees using outer joins
+-- instructor ID determines instructors name
+CREATE VIEW advisee_counts as(
+SELECT
+    result.name, instructor.id, result.advisees
+FROM
+    (SELECT
+        name, count(s_id) as advisees
+    FROM
+        instructor left outer join advisor on (instructor.id = advisor.i_id)
+    GROUP BY
+        id) as result, instructor
+WHERE instructor.name = result.name);
+
+BEGIN;
+    DELETE FROM takes where id = '58300' and course_id = '408' and
+                            semester = 'Spring' and year = 2004;
+    INSERT INTO takes values ('58300', '760', '1', 'Spring', 2004);
+COMMIT;
+
+-- Integrity constraints
+ALTER TABLE course add check (credits < 5);
+--ALTER TABLE course DROP constraint course_credits_check;
+ALTER TABLE course add constraint credits_less_then_5 check (credits < 5);
+ALTER TABLE course add constraint credits_greater_then_0 check (credits > 0);
+
+-- Write a query that makes sure that no classroom is double booked.
+SELECT
+    semester, year, building, room_number, time_slot_id
+FROM
+    section
+GROUP BY
+    semester, year, building, room_number, time_slot_id
+HAVING
+    count(*) > 1;
+
+
+-- Adds a new key called rooms_not_double_booked and index
+ALTER TABLE section ADD CONSTRAINT rooms_not_double_booked
+    UNIQUE (semester, year, building, room_number, time_slot_id);
+
+/* DATES INFO
+CREATE TYPE
+    semester as ENUM ('Fall', 'Spring', 'Summer');
+
+CREATE table foos(
+    sem semester,
+    bday date
+)
+
+Select
+*
+FROM X
+Where
+bday < '2015-01-03' -- not a string;
+
+Select
+*
+FROM
+X
+Where
+bday between '2015-01-03' and '2015-03-26'
+
+or
+bday + interval '4 months'
+
+SELECT extract(month from bday) from X
+ */
+
+-- Authorizations
+-- REVOKE CONNECT ON DATABASE exam1 FROM public;
+-- GRANT CONNECT ON DATABASE exam1 to public;
+REVOKE CONNECT ON DATABASE jalubk20_university FROM PUBLIC;
+REVOKE CONNECT ON DATABASE jalubk20_university FROM jwcowa20;
+GRANT CONNECT ON DATABASE jalubk20_university to bsuns20;
+GRANT SELECT (id, name, dept_name) on instructor to bsuns20;
+
+
+
+
+
+
+CREATE INDEX takes_id on takes(id); --create index to get fast access based on student ID
 
