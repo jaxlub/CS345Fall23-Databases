@@ -347,4 +347,68 @@ create domain degree level varchar(10)
             test check (value in ('Bachelors', 'Masters', 'Doctorate'));
 
 grant references (dept name) on department to Mariano;
+
+
+ Find t he enrollment of ea h se tion t hat was o ered in Fall 2017.
+select ourse id, sec_id,
+(select count(ID)
+from takes
+where takes.year = se tion.year
+and takes.semester = se tion.semester
+and takes. ourse id = se tion. ourse id
+and takes.se id = se tion.se id )
+as enrollment
+from se tion
+where semester = 'Fall'
+and year = 2017
+
+
+ Find t he maximum enrollment, a ross all se tions, in Fall 2017.
+One way of wr iting t his quer y is as follows:
+sele t max(enrollment)
+from (sele t ount(ID) as enrollment
+from se tion, takes
+where takes.year = se tion.year
+and takes.semester = se tion.semester
+and takes. ourse id = se tion. ourse id
+and takes.se id = se tion.se id
+and takes.semester = 'Fall'
+and takes.year = 2017
+group by takes. ourse id, takes.se id
+
+
+ SQL Commands -
+psql -U jalubk20 -h ada.hpc.stlawu.edu
+
+Fatdoglub!
+Where __ Between __ and ___
+
+Order by ___ desc and ___ asc
+
+Like ‘%/%’ escape “/“
+
+“_ _ _%” - at least 3 characters
+% = substring match
+_ = character match
+
+upper,lower,trim for string edits
+
+As clause - correlation name
+
+Alter table R add A D;
+Alter table R drop A;
+
+Delete from R; - delete all info in relation and replace with null
+
+Drop table R; - delete relation
+
+cDrop table x if exists;
+
+numeric(4,3) = X.XXX
+Insert into ____ value (____)
+
+Foreign key () references ____
+Primary key ____
+
+from (student natural join takes) join course using (course id);
  */
