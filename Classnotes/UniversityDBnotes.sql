@@ -337,3 +337,14 @@ GRANT SELECT (id, name, dept_name) on instructor to bsuns20;
 
 CREATE INDEX takes_id on takes(id); --create index to get fast access based on student ID
 
+/*
+ update instructor set salary = case
+when salary <= 100000 then salary * 1.05
+else salary * 1.03 end
+
+create domain degree level varchar(10)
+    constraint degree level
+            test check (value in ('Bachelors', 'Masters', 'Doctorate'));
+
+grant references (dept name) on department to Mariano;
+ */
