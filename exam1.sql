@@ -2,6 +2,8 @@
 -- Jax Lubkowitz
 
 -- Question 1
+-- Ed: Good. Could have used a natural join instead of the explicit join, but good
+-- for using join syntax.
 SELECT
     firstname, lastname, title, releaseyear, director, charactername
 FROM
@@ -11,6 +13,9 @@ ORDER BY lastname, releaseyear;
 
 
 -- Question 2
+-- Ed. Good. Should have used JOIN syntax for clarity and brevity
+-- for a better answer. -1
+
 WITH
     counter as (SELECT
                     actsin.actorid, count(actsin.actorid)
