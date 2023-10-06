@@ -1,4 +1,3 @@
-
 import psycopg2
 import tabulate
 print(f"psycopg version {psycopg2.__version__}")

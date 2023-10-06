@@ -6,7 +6,7 @@ def get_title_by_isbn(connection, isbn: str) -> str:
     cmd = "SELECT title FROM books WHERE isbn = %s"
 
     # get a cursor to execute the query
-    cur = conn.cursor()
+    cur = connection.cursor()
     cur.execute(cmd, (isbn.strip(),))  # isbn must be a tuple
 
     # get the resultset which is either of size 0 or 1 (as it is a primary key)
@@ -36,7 +36,7 @@ def get_books_by_author(connection, author: str) -> list[str]:
     cur.execute(cmd, (author.strip(),))  # isbn must be a tuple
 
     # Bad Security Practice
-    # cmd = "SELECT title FROM books where books.author = '" + author + "'"
+    cmd1 = "SELECT title FROM books where books.author = '" + author + "'"
     # cur.execute(cmd)  # isbn must be a tuple
 
     return_value = []
@@ -45,6 +45,33 @@ def get_books_by_author(connection, author: str) -> list[str]:
     cur.close()
     return return_value
 
+def get_rating_by_isbn(connection, isbn: str) -> list[str]:
+    """
+    Return rating from desired isbn
+    :param connection: connection object to DB
+    :param isbn: Book isbn 
+    :return:
+    """
+    cur = connection.cursor()
+    cmd = """
+            SELECT 
+                title, rating
+            FROM 
+                books natural join ratings using (isbn)
+            WHERE 
+                books.isbn = %s
+          """
+    cur.execute(cmd, (author.strip(),))  # isbn must be a tuple
+
+    # Bad Security Practice
+    cmd1 = "SELECT title FROM books where books.author = '" + author + "'"
+    # cur.execute(cmd)  # isbn must be a tuple
+
+    return_value = []
+    for row in cur:
+        return_value.append(row)
+    cur.close()
+    return return_value
 
 # Main program
 if __name__ == "__main__":
