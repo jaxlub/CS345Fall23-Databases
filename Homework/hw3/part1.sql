@@ -123,6 +123,7 @@ WHERE
 
 --d) Delete enrollments of above section for student ID 12345
 -- This deletes from the relation takes, all cases where student 12345 is in the course 999
+-- Ed: Could delete too many courses. Need to check Fall 2017
 DELETE FROM
     takes
 WHERE
