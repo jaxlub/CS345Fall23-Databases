@@ -1,10 +1,12 @@
 import books_ratings
 import connect_books
 import tabulate
+import Ratings
+import Users
+import Books
 import connect_books as cb
 import books_ratings as br
-import psycopg2 as pg
-import Books
+import psycopg as pg
 
 def menu() -> str:
     """
@@ -31,41 +33,49 @@ def menu() -> str:
 
 if __name__ == "__main__":
     conn = connect_books.connect()
+    ratings = Ratings.Ratings(conn)
+    users = Users.Users(conn)
     books = Books.Books(conn)
     while True:
         opt = menu()
         if opt == '1':
             isbn = input("Enter an ISBN: ")
-            conn = connect_books.connect()
-            print(books_ratings.get_title_by_isbn(conn, isbn))
+            print(f"\n", books.get_title_by_isbn(isbn), "\n")
             # get title by ISBN
         elif opt == '2':
             author = input("Enter an author: ")
+            a = books.get_books_by_author(author)
+            if a is None:
+                print("Error: No author found with that name")
+            else:
+                print(tabulate.tabulate(books.get_books_by_author(author),
+                                        headers = ["Title", "Year", "Publisher", "ISBN"],
+                                        tablefmt= "fancy_outline"))
 
-            print(tabulate.tabulate(books.get_books_by_author(conn, author),
-                                    headers = ["Title", "Year", "Publisher", "ISBN"],
-                                    tablefmt= "fancy_outline"))
             # get books by author
         elif opt in ['Q','q']:
             break
         elif opt == '3':
             author = input("Enter an author: ")
-            conn = connect_books.connect()
-            print(tabulate.tabulate(books_ratings.avg_rating_by_author(conn, author)))
+            if books.valid_author(author):
+                print(tabulate.tabulate(ratings.avg_rating_by_author(author)))
+            else:
+                print("Error: No author")
         elif opt == '4':
             author = input("Enter the author: ")
             book = input("Enter a book: ")
-            conn = connect_books.connect()
-            print(tabulate.tabulate(books_ratings.get_avg_by_title_author(conn, author, book)))
+            if books.valid_books(book) and books.valid_author(author):
+                print(tabulate.tabulate(ratings.avg_rating_by_author(author)))
+            else:
+                print("Error: No such title or author")
         elif opt == '5':
-            conn = connect_books.connect()
-            print(f"\nThe average rating for the user with the most reviews is: ", round((books_ratings.avg_rating_most_reviews_user(conn)), 2), "\n")
+            print(f"\nThe average rating for the user with the most reviews is: ",
+                  round((users.avg_rating_most_reviews_user()), 2), "\n")
         elif opt == '6':
             new_id = input("Enter a new user id: ")
             location = input("Enter a location: ")
             age = input("Enter an age: ")
-            conn = connect_books.connect()
-            print(books_ratings.add_user(conn, new_id, location, age))
+            users.add_user(new_id, location, age)
         elif opt == '7':
             title = input("Enter a title: ")
             author = input("Enter an author: ")
@@ -75,37 +85,37 @@ if __name__ == "__main__":
             medium = input("Enter a medium image: ")
             large = input("Enter a large image: ")
             isbn = input("Enter an ISBN: ")
-            conn = connect_books.connect()
-            books_ratings.insert_book(conn, title, author, int(year), publisher, small, medium, large, isbn)
+            books.insert_book(title, author, int(year), publisher, small, medium, large, isbn)
         elif opt == '8':
             id = input("Enter a user id: ")
             isbn = input("Enter an ISBN: ")
             book_rating = input("Enter a rating: ")
-            while not book_rating.isnumeric() and 10 < int(book_rating) < 0:
+            while not book_rating.isnumeric():
                 book_rating = input("Enter a valid number:")
-            conn = connect_books.connect()
-            books_ratings.add_review(conn, id, isbn, book_rating)
+            while not 0 < int(book_rating) < 10:
+                book_rating = input("Enter a valid number:")
+            ratings.add_review(id, isbn, book_rating)
         elif opt == '9':
-            conn = connect_books.connect()
             n = input("Enter the number of authors: ")
             while not n.isnumeric():
                 n = input("Enter a valid number:")
             if n.isnumeric():
                 books_printed = 10
-                print(tabulate.tabulate(books_ratings.top_n_authors(conn, n, 0)))
+                print(tabulate.tabulate(books.top_n_authors(n, str("0"))))
                 while books_printed < int(n):
                     enter = input("Press Enter to continue")
-                    print(tabulate.tabulate(br.top_n_authors(conn, n, books_printed)))
+                    print(tabulate.tabulate(books.top_n_authors(n, str(books_printed))))
                     books_printed += 10
+                input("Press Enter to continue")
         elif opt == '10':
-            conn = connect_books.connect()
             number_books = input("# of top books:")
             while not number_books.isnumeric():
                 number_books = input("Enter a valid number:")
             if number_books.isnumeric():
                 books_printed = 10
-                print(tabulate.tabulate(br.top_n_books(conn, number_books, 0)))
+                print(tabulate.tabulate(books.top_n_books(number_books, str("0"))))
                 while books_printed < int(number_books):
-                    enter = input("Press Enter to continue")
-                    print(tabulate.tabulate(br.top_n_books(conn, int(number_books), books_printed)))
+                    # enter = input("Press Enter to continue")
+                    print(tabulate.tabulate(books.top_n_books(number_books, str(books_printed))))
                     books_printed += 10
+                    input("Press Enter to continue")
