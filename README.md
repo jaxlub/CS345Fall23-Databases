@@ -10,3 +10,4 @@
     * part2.sql - Textbook Exercise on DDL creation
 - hw4.sql - 9/20/23 - University Database GPA Queries 
 - hw5 - 10/25/23 - Books Rating Database Python User Interface App
+- hw6 - 11/12/23 - Entity Relationship Diagram and DDL for IMDB database in 4th Normal Form
