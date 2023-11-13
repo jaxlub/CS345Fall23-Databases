@@ -53,9 +53,14 @@ openssl pkeyutl -sign -in mobydick.hash -inkey pub_priv.key -pkeyopt digest:sha2
 openssl pkeyutl -verify -in mobydick.hash -sigfile mobydick.txt.sign -pubin -inkey public_key.key -pkeyopt digest:sha256 -keyform PEM
 ```
 
-
-
 ```
 # Get IP Address of Machine
 curl http://checkip.amazonaws.com
+```
+
+Symmetric Encrypting/decrypting of Mobydick
+```
+openssl enc -aes-256-ctr -pass file:password.txt -pbkdf2 -e -base64 -in mobydick.txt -out encrypted_mobydick.txt
+
+openssl enc -aes-256-ctr -pass file:password.txt -pbkdf2 -d -base64 -in encrypted_mobydick.txt -out decrypted_mobydick.txt
 ```
