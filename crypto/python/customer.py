@@ -1,6 +1,7 @@
 import psycopg2 as pg
 import json
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+import base64
 
 
 class Customer:
@@ -22,8 +23,10 @@ class Customer:
             )
 
     def create_table(self):
-        self.conn.execute(Customer.CT)
+        cur = self.conn.cursor()
+        cur.execute(Customer.CT)
         self.conn.commit()
+        cur.close()
 
     def insert(self, cid: int, first: str, last: str, ccnum: str, ccexp: str, cvv: str):
         # Python dictionary = Json object
@@ -35,6 +38,8 @@ class Customer:
             'ccexp': ccexp,
             'cvv': cvv
         }
+
+        # converting object to string and then string to bytes
         ccdata_bytes = json.dumps(ccjson).encode()
 
         # encrypt cc data
@@ -45,6 +50,18 @@ class Customer:
         iv = bytes.fromhex('0987654321fedcba' * 2)
 
         aesCipher = Cipher(algorithms.AES(key), modes.CTR(iv))
+        aesEncryptor = aesCipher.encryptor()
+
+        # Encode bytes and fill the rest of the block with finalize - result in binary
+        ciphertext = aesEncryptor.update(ccdata_bytes) + aesEncryptor.finalize()
+
+        # convert to text from binary
+        b64ct = base64.b64encode(ciphertext)
+
+        cur = self.conn.cursor()
+        cur.execute(Customer.INS, (cid, b64ct))
+        self.conn.commit()
+        cur.close()
 
 
 
