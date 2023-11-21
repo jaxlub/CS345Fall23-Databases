@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/Classnotes/UniversityDBnotes.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/Classnotes/ZipcodesDBnotes.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/Classnotes/hogwarts_DDL.sql" dialect="PostgreSQL" />
+    <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>

@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://ada.hpc.stlawu.edu:5432/jalubk20</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="book_ratings" uuid="d597eb4e-470e-426d-b163-971d31bf449b">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ada.hpc.stlawu.edu:5432/jackjax_booksdataset</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
