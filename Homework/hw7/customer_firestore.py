@@ -21,11 +21,11 @@ class CustomerFireStore(Customer):
         # Create a CC collections
         self.coll = db.collection("CreditCards")
 
-        with open('../../key.txt', 'r') as f:
+        with open('../../../key.txt', 'r') as f:
             str_key = (f.readline().strip()) * 2
             self.key = bytes.fromhex(str_key)
 
-        with open('../../iv.txt', 'r') as f:
+        with open('../../../iv.txt', 'r') as f:
             str_iv = (f.readline().strip()) * 2
             self.iv = bytes.fromhex(str_iv)
 

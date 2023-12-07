@@ -18,7 +18,7 @@ class CustomerGoogleCloud(Customer):
     D = "DELETE FROM customer where id = %s"
 
     def __init__(self):
-        with open('../../pgpass.txt', 'r') as f:
+        with open('../../../pgpass.txt', 'r') as f:
             self.conn = pg.connect(
                 host=CustomerGoogleCloud.HOST,
                 user='jalubk',
@@ -26,11 +26,11 @@ class CustomerGoogleCloud(Customer):
                 password=f.readline().strip()
             )
 
-        with open('../../key.txt', 'r') as f:
+        with open('../../../key.txt', 'r') as f:
             str_key = (f.readline().strip()) * 2
             self.key = bytes.fromhex(str_key)
 
-        with open('../../iv.txt', 'r') as f:
+        with open('../../../iv.txt', 'r') as f:
             str_iv = (f.readline().strip()) * 2
             self.iv = bytes.fromhex(str_iv)
 
