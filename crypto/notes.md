@@ -8,7 +8,7 @@ openssl genrsa -out pub_priv.key 3072
 openssl rsa -text -in pub_priv.key | less
 
 # make public key
-penssl rsa -in pub_priv.key -pubout -out public_key.key
+openssl rsa -in pub_priv.key -pubout -out public_key.key
 
 # encrypt message using public key
 openssl pkeyutl -encrypt -pubin -inkey public_key.key -in m.txt -out m_encrypted.bin
